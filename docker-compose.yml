@@ -1,0 +1,53 @@
+version: '3.9'
+
+services:
+  db:
+    image: mysql:8.3
+    container_name: db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: symfony_starter
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping","-h","localhost"]
+      interval: 5s
+      retries: 10
+
+  app:
+    build: .
+    container_name: app
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_USER: root
+      DB_PASS: 1234
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: symfony_starter
+      DB_VERSION: 8.3.0
+      DATABASE_URL: "mysql://root:1234@db:3306/symfony_starter?serverVersion=8.3.0"
+    volumes:
+      - .:/var/www/html
+    expose:
+      - "9000"
+
+  web:
+    image: nginx:latest
+    container_name: web
+    restart: always
+    depends_on:
+      - app
+    volumes:
+      - .:/var/www/html
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    ports:
+      - "8080:80"
+
+volumes:
+  mysql_data:

@@ -53,6 +53,12 @@
         "start": [
             "php -S 127.0.0.1:8000 -t public"
         ],
+        "build-docker-container": [
+            "docker build -t symfony-app ."
+        ],
+        "run-docker-container": [
+            "sudo docker run -it --rm --network host --env-file .env symfony-app"
+        ],
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"

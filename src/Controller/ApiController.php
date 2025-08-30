@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,6 +30,31 @@ class test{
 
 class ApiController extends AbstractController
 {
+    #[Route('/api/users', name: 'api_users', methods: ['GET'])]
+    public function getUsers(EntityManagerInterface $em): JsonResponse
+    {
+        // Dohvati repository za User
+        $userRepository = $em->getRepository(User::class);
+
+        // Povuci sve korisnike iz baze
+        $users = $userRepository->findAll();
+
+        // Pretvori ih u array za JSON
+        $data = array_map(function(User $user) {
+            return [
+                'id' => $user->getId(),
+                'email' => $user->getEmail(),
+                'first_name' => $user->getFirstName(),
+                'last_name' => $user->getLastName()
+            ];
+        }, $users);
+
+        return $this->json([
+            'status' => 'success',
+            'users' => $data
+        ]);
+    }
+
     #[Route('/api/hello', name: 'api_hello', methods: ['GET'])]
     public function hello(): JsonResponse
     {
