@@ -5,9 +5,12 @@ namespace App\Service;
 use App\Repository\UserRepository;
 use App\Entity\User;
 use App\Service\JwtService;
+use App\Message\SendEmailMessage;
+
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\NativePasswordHasher;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class AuthService
 {
@@ -15,13 +18,15 @@ class AuthService
     private JwtService $jwt;
     private NativePasswordHasher $hasher;
     private UserRepository $userRepo;
+    private MessageBusInterface $bus;
 
-    public function __construct(EntityManagerInterface $em, JwtService $jwt, UserRepository $userRepo)
+    public function __construct(EntityManagerInterface $em, JwtService $jwt, UserRepository $userRepo, MessageBusInterface $bus)
     {
         $this->em = $em;
         $this->jwt = $jwt;
         $this->hasher = new NativePasswordHasher();
         $this->userRepo = $userRepo;
+        $this->bus = $bus;
     }
 
     public function register($dto)
@@ -38,7 +43,13 @@ class AuthService
         $dto->password = $this->hasher->hash($dto->password);
         $entity = $dto->toEntity(new User());
         consoleLog($entity); //A little helper for inspecting variables. Logs are displayed in server console.
-        $created = $this->userRepo->save($entity); // sve odrađeno u repository-u
+        $created = $this->userRepo->save($entity);
+        //Simulating sending email for now
+        $this->bus->dispatch(new SendEmailMessage(
+            $dto->email,
+            'Welcome!',
+            'Thanks for registering!'
+        ));
 
         return $created;
     }
