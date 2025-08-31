@@ -13,12 +13,6 @@ class JwtService
         $this->secret = $_ENV['JWT_SECRET'] ?? getenv('JWT_SECRET');
     }
 
-    public function inspectSecret()
-    {
-        error_log('JWT SECRET:');
-        error_log($this->secret);
-    }
-
     public function generateToken(array $payload, int $expiry = 3600): string
     {
         $payload['exp'] = time() + $expiry;

@@ -3,87 +3,51 @@
 namespace App\Controller;
 
 use App\Service\AuthService;
-use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Psr\Log\LoggerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use App\Traits\RequestValidationTrait;
+use App\Dto\RegisterDto;
 
 class AuthController extends AbstractController
 {
-    private AuthService $authService;
+    use RequestValidationTrait;
 
-    public function __construct(AuthService $authService)
+    private AuthService $authService;
+    private ValidatorInterface $validator;
+
+    public function __construct(AuthService $authService, ValidatorInterface $validator)
     {
         $this->authService = $authService;
+        $this->validator = $validator;
     }
 
     #[Route('/auth/register', name: 'auth_register', methods: ['POST'])]
-    public function register(EntityManagerInterface $em): JsonResponse
+    public function register(Request $request): JsonResponse
     {
-        $data = $this->authService->register();
+        $dto = $this->validateRequestDto($request, RegisterDto::class, $this->validator);
+        //TODO: validate requests
+        //$dto = json_decode($request->getContent(), true);
+        $created = $this->authService->register($dto);
 
         return $this->json([
             'status' => 'success',
-            'users' => $data
+            'users' => $created
         ]);
     }
 
-    #[Route('/api/users', name: 'api_users', methods: ['GET'])]
-    public function getUsers(EntityManagerInterface $em): JsonResponse
+    #[Route('/auth/login', name: 'auth_login', methods: ['POST'])]
+    public function login(Request $request): JsonResponse
     {
-        $data = $this->authService->getAllUsers();
-
-        return $this->json([
-            'status' => 'success',
-            'users' => $data
-        ]);
-    }
-
-    #[Route('/api/hello', name: 'api_hello', methods: ['GET'])]
-    public function hello(): JsonResponse
-    {
-        $test = test::getInstance('goran', '39');
-
-        return $this->json([
-            'message' => 'Hello API!',
-            'status' => 'success',
-            'multi' => [
-                'data1' => $test->username,
-                'data2' => $test->age
-            ]
-        ]);
-    }
-
-    #[Route('/api/test', name: 'api_test', methods: ['POST'])]
-    public function test(Request $request, LoggerInterface $logger): JsonResponse
-    {
-        // 1. Dohvati query parametre (GET parametri)
-        $page = $request->query->get('page', 1); // default = 1
-        //$logger->info('Debug data', ['page' => $page]);
-        error_log("PAGE");
-        error_log($page);
-        error_log($request->headers);
-        dd(getallheaders()['Content-Length']);
-
-
-        // 2. Dohvati podatke iz JSON body-a
+        //TODO: validate requests
         $data = json_decode($request->getContent(), true);
-        $username = $data['username'] ?? null;
+        $token = $this->authService->login($data);
 
-        // 3. Dohvati header
-        $auth = $request->headers->get('Authorization');
-
-        // 4. Standardni POST parametri (application/x-www-form-urlencoded)
-        $password = $request->request->get('password');
-
-        return new JsonResponse([
-            'page' => $page,
-            'username' => $username,
-            'password' => $password,
-            'auth_header' => $auth,
+        return $this->json([
+            'status' => 'success',
+            'token' => $token
         ]);
     }
 }

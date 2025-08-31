@@ -17,25 +17,22 @@ class AuthService
         $this->jwt = $jwt;
     }
 
-    public function register(): array
+    public function register($data)
     {
-        //$this->jwt->inspectSecret();
-        return [];
+        //1. Check if user already exists with same email
+        //2. create record
+        //3. Simulate send email using symfony messenger (something like verificate email or similar). this can't be blocking operation
+        //3. return user record to controller
+        return $data;
     }
 
-    public function getAllUsers(): array
+    public function login($data): string
     {
-        // Dohvati sve korisnike iz baze
-        $users = $this->em->getRepository(User::class)->findAll();
+        // Fetch user
+        $user = $this->em->getRepository(User::class)->findBy(['email' => $data['email']]);
+        error_log($user);
 
         // Pretvori ih u array za JSON
-        return array_map(function(User $user) {
-            return [
-                'id' => $user->getId(),
-                'email' => $user->getEmail(),
-                'first_name' => $user->getFirstName(),
-                'last_name' => $user->getLastName(),
-            ];
-        }, $users);
+        return 'jwt token';
     }
 }
