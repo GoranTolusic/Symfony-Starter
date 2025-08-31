@@ -2,52 +2,39 @@
 
 namespace App\Controller;
 
+use App\Service\AuthService;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Psr\Log\LoggerInterface;
 
-
-class test{
-    public $username;
-    public $age;
-
-    public function __construct($username, $age)
-    {
-        $this->username = $username;
-        $this->age = $age;
-    }
-
-    static function getInstance($username, $age)
-    {
-        return new self($username, $age);
-    }
-}
-
-class ApiController extends AbstractController
+class AuthController extends AbstractController
 {
+    private AuthService $authService;
+
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
+    #[Route('/auth/register', name: 'auth_register', methods: ['POST'])]
+    public function register(EntityManagerInterface $em): JsonResponse
+    {
+        $data = $this->authService->register();
+
+        return $this->json([
+            'status' => 'success',
+            'users' => $data
+        ]);
+    }
+
     #[Route('/api/users', name: 'api_users', methods: ['GET'])]
     public function getUsers(EntityManagerInterface $em): JsonResponse
     {
-        // Dohvati repository za User
-        $userRepository = $em->getRepository(User::class);
-
-        // Povuci sve korisnike iz baze
-        $users = $userRepository->findAll();
-
-        // Pretvori ih u array za JSON
-        $data = array_map(function(User $user) {
-            return [
-                'id' => $user->getId(),
-                'email' => $user->getEmail(),
-                'first_name' => $user->getFirstName(),
-                'last_name' => $user->getLastName()
-            ];
-        }, $users);
+        $data = $this->authService->getAllUsers();
 
         return $this->json([
             'status' => 'success',
