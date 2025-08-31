@@ -28,14 +28,8 @@ class AuthController extends AbstractController
     public function register(Request $request): JsonResponse
     {
         $dto = $this->validateRequestDto($request, RegisterDto::class, $this->validator);
-        //TODO: validate requests
-        //$dto = json_decode($request->getContent(), true);
         $created = $this->authService->register($dto);
-
-        return $this->json([
-            'status' => 'success',
-            'users' => $created
-        ]);
+        return $this->json(['data' => $created]);
     }
 
     #[Route('/auth/login', name: 'auth_login', methods: ['POST'])]
