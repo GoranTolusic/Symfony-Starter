@@ -7,22 +7,19 @@ use App\Entity\User;
 use App\Service\JwtService;
 use App\Message\SendEmailMessage;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\NativePasswordHasher;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 class AuthService
 {
-    private EntityManagerInterface $em;
     private JwtService $jwt;
     private NativePasswordHasher $hasher;
     private UserRepository $userRepo;
     private MessageBusInterface $bus;
 
-    public function __construct(EntityManagerInterface $em, JwtService $jwt, UserRepository $userRepo, MessageBusInterface $bus)
+    public function __construct(JwtService $jwt, UserRepository $userRepo, MessageBusInterface $bus)
     {
-        $this->em = $em;
         $this->jwt = $jwt;
         $this->hasher = new NativePasswordHasher();
         $this->userRepo = $userRepo;
@@ -44,7 +41,7 @@ class AuthService
         $entity = $dto->toEntity(new User());
         consoleLog($entity); //A little helper for inspecting variables. Logs are displayed in server console.
         $created = $this->userRepo->save($entity);
-        //Simulating sending email for now
+        //Simulating async sending email for now
         $this->bus->dispatch(new SendEmailMessage(
             $dto->email,
             'Welcome!',
@@ -54,13 +51,15 @@ class AuthService
         return $created;
     }
 
-    public function login($data): string
+    public function login($dto): string
     {
-        // Fetch user
-        $user = $this->em->getRepository(User::class)->findBy(['email' => $data['email']]);
-        error_log($user);
-
-        // Pretvori ih u array za JSON
-        return 'jwt token';
+        //1. Fetch user, throw error if not exists
+        //2. Compare passwords, throw error if not matching
+        //3. Generate and return jwt token tok controller
+        
+        $user = $this->userRepo->findOneByEmail($dto->email);
+        if (!$user || !$this->hasher->verify($user->getPassword(), $dto->password)) 
+            throw new HttpException(401, 'Invalid Credentials');
+        return $this->jwt->generateToken(['id' => $user->id]);
     }
 }

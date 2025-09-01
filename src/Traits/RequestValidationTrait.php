@@ -12,23 +12,23 @@ trait RequestValidationTrait
     {
         $data = json_decode($request->getContent(), true) ?? [];
 
-        // Dohvati polja DTO-a
+        // Map fields from dto
         $dtoProps = array_map(fn($prop) => $prop->getName(), (new \ReflectionClass($dtoClass))->getProperties());
 
-        // Zadrži samo polja koja postoje u DTO-u
+        // Sync with dto fields
         $filteredData = array_filter(
             $data,
             fn($key) => in_array($key, $dtoProps),
             ARRAY_FILTER_USE_KEY
         );
 
-        // Napravi DTO instancu
+        // Instance new dto object
         $dto = new $dtoClass();
         foreach ($filteredData as $key => $value) {
             $dto->$key = $value;
         }
 
-        // Validacija
+        // Validate and format error validations
         $errors = $validator->validate($dto);
         if (count($errors) > 0) {
             $messages = [];

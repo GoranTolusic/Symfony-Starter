@@ -1,4 +1,6 @@
 # config/packages/messenger.yaml
+#This one is just simulating async process, it's not the real one, but for demonstrating pattern purposes
+#Real one need to use outer volumes in cache to hold data for processing, like redis or mqtt protocol
 framework:
     messenger:
         default_bus: messenger.bus.default

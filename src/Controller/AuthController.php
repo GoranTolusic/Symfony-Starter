@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use App\Traits\RequestValidationTrait;
 use App\Dto\RegisterDto;
+use App\Dto\LoginDto;
 
 class AuthController extends AbstractController
 {
@@ -28,20 +29,13 @@ class AuthController extends AbstractController
     public function register(Request $request): JsonResponse
     {
         $dto = $this->validateRequestDto($request, RegisterDto::class, $this->validator);
-        $created = $this->authService->register($dto);
-        return $this->json(['data' => $created]);
+        return $this->json(['data' => $this->authService->register($dto)]);
     }
 
     #[Route('/auth/login', name: 'auth_login', methods: ['POST'])]
     public function login(Request $request): JsonResponse
     {
-        //TODO: validate requests
-        $data = json_decode($request->getContent(), true);
-        $token = $this->authService->login($data);
-
-        return $this->json([
-            'status' => 'success',
-            'token' => $token
-        ]);
+        $dto = $this->validateRequestDto($request, LoginDto::class, $this->validator);
+        return $this->json(['data' => $this->authService->login($dto)]);
     }
 }

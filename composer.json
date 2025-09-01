@@ -57,6 +57,9 @@
         "start": [
             "php -S 127.0.0.1:8000 -t public"
         ],
+        "cache-clear": [
+            "php bin/console cache:clear"
+        ],
         "create-db": [
             "php create_db.php"
         ],

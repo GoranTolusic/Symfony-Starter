@@ -28,17 +28,12 @@ class User
     #[ORM\Column(type: "bigint")]
     public int $created_at;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
     public function getPassword(): string
     {
         return $this->password;
     }
 
-    public function setPassword(string $email): self
+    public function setPassword(string $password): self
     {
         $this->password = $password;
         return $this;
