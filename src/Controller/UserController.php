@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use App\Traits\RequestValidationTrait;
 use App\Traits\MiddlewareTrait;
 use App\Dto\FilterUserDto;
+use App\Dto\UpdateProfileDto;
 
 //For accessing user endpoints, user needs to be authenticated (Authorization header is required on requests)
 class UserController extends AbstractController
@@ -39,5 +40,13 @@ class UserController extends AbstractController
         $this->authenticateUser($request);
         $dto = $this->validateRequestDto($request, FilterUserDto::class, $this->validator);
         return $this->json(['data' => $this->userService->filter($dto)]);
+    }
+
+    #[Route('/user/updateMyProfile', name: 'user_updateMyProfile', methods: ['PUT'])]
+    public function updateMyProfile(Request $request): JsonResponse
+    {
+        $this->authenticateUser($request);
+        $dto = $this->validateRequestDto($request, UpdateProfileDto::class, $this->validator);
+        return $this->json(['data' => $dto]);
     }
 }
