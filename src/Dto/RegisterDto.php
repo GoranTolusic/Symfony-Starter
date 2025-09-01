@@ -7,25 +7,33 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class RegisterDto extends BaseAbstractDto
 {
+    #[Assert\NotNull(message: 'Email cannot be null.')]
     #[Assert\NotBlank]
     #[Assert\Email]
-    public string $email;
+    #[Assert\Type('string')]
+    public ?string $email;
 
+    #[Assert\NotNull(message: 'First name cannot be null.')]
+    #[Assert\Type('string')]
     #[Assert\NotBlank]
     #[Assert\Length(min: 3, max: 50)]
-    public string $first_name;
+    public ?string $first_name;
 
+    #[Assert\NotNull(message: 'Last name cannot be null.')]
+    #[Assert\Type('string')]
     #[Assert\NotBlank]
     #[Assert\Length(min: 3, max: 50)]
-    public string $last_name;
+    public ?string $last_name;
 
+    #[Assert\NotNull(message: 'Password cannot be null.')]
+    #[Assert\Type('string')]
     #[Assert\NotBlank]
     #[Assert\Length(min: 4, max: 8)]
     #[Assert\Regex(
         pattern: "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/",
         message: "Password must contain at least one lowercase letter, one uppercase letter, and one number."
     )]
-    public string $password;
+    public ?string $password;
 
     public readonly int $created_at;
 

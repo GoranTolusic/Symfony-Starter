@@ -15,7 +15,7 @@ class FilterUserDto extends BaseAbstractDto
         max: 200,
         maxMessage: "Term cannot be longer than {{ limit }} characters."
     )]
-    public $term = null;
+    public ?string $term = null;
 
     #[Assert\NotBlank(message: "Page is required.")]
     #[Assert\Type(

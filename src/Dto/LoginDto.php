@@ -9,8 +9,10 @@ class LoginDto extends BaseAbstractDto
 {
     #[Assert\NotBlank]
     #[Assert\Email]
-    public string $email;
+    #[Assert\NotNull(message: 'Email cannot be null.')]
+    public ?string $email;
 
     #[Assert\NotBlank]
-    public string $password;
+    #[Assert\NotNull(message: 'Password cannot be null.')]
+    public ?string $password;
 }
