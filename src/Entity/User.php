@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
 #[ORM\Table(name: "users")]
@@ -37,5 +39,24 @@ class User
     {
         $this->password = $password;
         return $this;
+    }
+
+    #Tags relation
+    #HINT: In my opinion very bad for real case scenarios, because of potential fetching large number of records
+    #It's just better to use custom queries from repos for specific use cases
+    #[ORM\OneToMany(mappedBy: "user", targetEntity: Tag::class, cascade: ["persist", "remove"])]
+    private Collection $tags;
+
+    public function __construct()
+    {
+        $this->tags = new ArrayCollection();
+    }
+
+    /**
+     * @return Collection|Tag[]
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
     }
 }

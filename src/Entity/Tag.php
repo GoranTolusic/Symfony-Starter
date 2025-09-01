@@ -16,6 +16,7 @@ class Tag
     #[ORM\Column(type: "string", length: 100, nullable: false)]
     public string $label;
 
+    //User relation. Belongs to one are just fine unlike vice versa (One to many which is demonstrated in User model)
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: "user_id", referencedColumnName: "id", nullable: false)]
     private $user;
