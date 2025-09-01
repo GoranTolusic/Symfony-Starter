@@ -18,10 +18,12 @@ class ExceptionListener
 
         $message = $exception->getMessage() ?: 'Unexpected error';
 
+        consoleLog($message);
+
         $event->setResponse(new JsonResponse([
             'status' => 'error',
             'code'   => $statusCode,
-            'message'=> $message,
+            'message'=> $statusCode !== 500 ? $message : 'Something went wrong. Internal Server Error',
             'validations' => $statusCode == 400 ? $exception->validations : null
         ], $statusCode));
     }

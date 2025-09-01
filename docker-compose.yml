@@ -32,6 +32,8 @@ services:
       DB_NAME: symfony_starter
       DB_VERSION: 8.3.0
       DATABASE_URL: "mysql://root:1234@db:3306/symfony_starter?serverVersion=8.3.0"
+      CONSOLE_LOGS: "true"
+      JWT_SECRET: kQ345kZ35gjh3g4509Fsurn8Fv4AyUUa
     volumes:
       - .:/var/www/html
     expose:

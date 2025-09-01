@@ -29,4 +29,11 @@ class JwtService
             return null;
         }
     }
+
+    //For quick access accross middleware functions
+    public static function validateStatic(string $token): ?array
+    {
+        $instance = new self();
+        return $instance->validateToken($token);
+    }
 }

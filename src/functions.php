@@ -4,6 +4,7 @@
 if (!function_exists('consoleLog')) {
     function consoleLog($data): void
     {
-        error_log("\033[31m" . print_r($data, true) . "\033[0m");
+        $logs = $_ENV['CONSOLE_LOGS'] ?? getenv('CONSOLE_LOGS');
+        if ($logs) error_log("\033[31m" . print_r($data, true) . "\033[0m");
     }
 }

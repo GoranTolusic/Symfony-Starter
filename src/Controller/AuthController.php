@@ -9,12 +9,13 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use App\Traits\RequestValidationTrait;
+use App\Traits\MiddlewareTrait;
 use App\Dto\RegisterDto;
 use App\Dto\LoginDto;
 
 class AuthController extends AbstractController
 {
-    use RequestValidationTrait;
+    use RequestValidationTrait, MiddlewareTrait;
 
     private AuthService $authService;
     private ValidatorInterface $validator;

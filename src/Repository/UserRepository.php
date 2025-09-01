@@ -30,5 +30,34 @@ class UserRepository extends ServiceEntityRepository
         }
         return $user;
     }
-}
 
+    public function filter(?string $term, int $limit = 20, int $page = 1): array
+    {
+        $offset = ($page - 1) * $limit;
+        $qb = $this->createQueryBuilder('u');
+
+        //Applying where clause if term exists in request payload
+        if ($term) {
+            $qb->andWhere('u.email LIKE :term OR u.first_name LIKE :term OR u.last_name LIKE :term')
+                ->setParameter('term', '%' . $term . '%');
+        }
+
+        // Clone query for total count before applying pagination
+        $countQb = clone $qb;
+        $total = (int) $countQb
+            ->select('COUNT(u.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        // Apply pagination
+        $users = $qb->setMaxResults($limit)
+            ->setFirstResult($offset)
+            ->getQuery()
+            ->getResult();
+
+        return [
+            'data' => $users,
+            'total' => $total,
+        ];
+    }
+}
