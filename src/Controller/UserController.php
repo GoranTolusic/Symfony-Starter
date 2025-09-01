@@ -45,8 +45,8 @@ class UserController extends AbstractController
     #[Route('/user/updateMyProfile', name: 'user_updateMyProfile', methods: ['PUT'])]
     public function updateMyProfile(Request $request): JsonResponse
     {
-        $this->authenticateUser($request);
+        $loggedUserId = $this->authenticateUser($request);
         $dto = $this->validateRequestDto($request, UpdateProfileDto::class, $this->validator);
-        return $this->json(['data' => $dto]);
+        return $this->json(['data' => $this->userService->updateMyProfile($dto, $loggedUserId)]);
     }
 }

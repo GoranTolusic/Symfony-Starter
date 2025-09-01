@@ -11,7 +11,10 @@ trait MiddlewareTrait
     public function authenticateUser(Request $request)
     {
         $token = $request->headers->get('Authorization');
-        if (!$token || !JwtService::validateStatic($token))
-            throw new HttpException(401, 'Missing, invalid or expired Authorization token');
+        if (!$token) throw new HttpException(401, 'Missing Authorization token');
+
+        $validatedToken = JwtService::validateStatic($token);
+        if (!$validatedToken || !$validatedToken['id']) throw new HttpException(401, 'Invalid or expired Authorization token');
+        return $validatedToken['id'];
     }
 }
