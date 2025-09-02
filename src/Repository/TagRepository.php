@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Entity\Tag;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -28,10 +27,5 @@ class TagRepository extends ServiceEntityRepository
             $this->em->persist($tagEntity);
         }
         $this->em->flush();
-    }
-
-    public function findByUserId(User $user): array
-    {
-        return $this->findBy(['user' => $user->id]);
     }
 }

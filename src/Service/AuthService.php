@@ -35,8 +35,9 @@ class AuthService
         //3. Convert dto to entity model
         //4. Create record in db
         //5. Save tags
-        //6. Send email using symfony messenger queue or something similar which is not going to block further logic
-        //7. Send response to client
+        //6. Set response
+        //7. Send email using symfony messenger queue or something similar which is not going to block further logic
+        //8. Send response to client
 
         $userExists = $this->userRepo->findOneByEmail($dto->email);
         if ($userExists) throw new HttpException(409, 'Email is already in use.');
@@ -45,7 +46,7 @@ class AuthService
         $created = $this->userRepo->save($entity);
         $this->tagRepo->saveTags($created, $dto->tags);
         $response = (object) get_object_vars($created);
-        $response->tags = $this->tagRepo->findByUserId($created);
+        $response->tags = $dto->tags;
 
         //Simulating async sending email for now
         $this->bus->dispatch(new SendEmailMessage(
