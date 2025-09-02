@@ -45,7 +45,7 @@ class User
     #HINT: In my opinion very bad for real case scenarios, because of potential fetching large number of records
     #It's just better to use custom queries from repos for specific use cases
     #[ORM\OneToMany(mappedBy: "user", targetEntity: Tag::class, cascade: ["persist", "remove"])]
-    private Collection $tags;
+    public Collection $tags;
 
     public function __construct()
     {

@@ -35,6 +35,20 @@ class RegisterDto extends BaseAbstractDto
     )]
     public ?string $password;
 
+    #[Assert\Type('array')]
+    #[Assert\Count(
+        max: 10,
+        maxMessage: 'You cannot specify more than {{ limit }} tags.'
+    )]
+    #[Assert\All([
+        new Assert\Type('string'),
+        new Assert\Length(
+            max: 50,
+            maxMessage: 'Each tag cannot be longer than {{ limit }} characters.'
+        )
+    ])]
+    public array $tags;
+
     public readonly int $created_at;
 
     public function __construct()

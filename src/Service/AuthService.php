@@ -6,7 +6,7 @@ use App\Repository\UserRepository;
 use App\Entity\User;
 use App\Service\JwtService;
 use App\Message\SendEmailMessage;
-
+use App\Repository\TagRepository;
 use Symfony\Component\PasswordHasher\Hasher\NativePasswordHasher;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -16,14 +16,16 @@ class AuthService
     private JwtService $jwt;
     private NativePasswordHasher $hasher;
     private UserRepository $userRepo;
+    private TagRepository $tagRepo;
     private MessageBusInterface $bus;
 
-    public function __construct(JwtService $jwt, UserRepository $userRepo, MessageBusInterface $bus)
+    public function __construct(JwtService $jwt, UserRepository $userRepo, MessageBusInterface $bus, TagRepository $tagRepo)
     {
         $this->jwt = $jwt;
         $this->hasher = new NativePasswordHasher();
         $this->userRepo = $userRepo;
         $this->bus = $bus;
+        $this->tagRepo = $tagRepo;
     }
 
     public function register($dto)
@@ -32,15 +34,19 @@ class AuthService
         //2. Need to hash password on DTO model
         //3. Convert dto to entity model
         //4. Create record in db
-        //5. Send email using symfony messenger queue or something similar which is not going to block further logic
-        //6. Send response to client
+        //5. Save tags
+        //6. Send email using symfony messenger queue or something similar which is not going to block further logic
+        //7. Send response to client
 
         $userExists = $this->userRepo->findOneByEmail($dto->email);
         if ($userExists) throw new HttpException(409, 'Email is already in use.');
         $dto->password = $this->hasher->hash($dto->password);
-        $entity = $dto->toEntity(new User());
-        consoleLog($entity); //A little helper for inspecting variables. Logs are displayed in server console.
+        $entity = $dto->toEntity(new User(), ['tags']);
         $created = $this->userRepo->save($entity);
+
+        $this->tagRepo->saveTags($created, $dto->tags);
+        $created->getTags();
+
         //Simulating async sending email for now
         $this->bus->dispatch(new SendEmailMessage(
             $dto->email,
