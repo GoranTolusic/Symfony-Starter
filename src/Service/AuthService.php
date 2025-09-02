@@ -43,9 +43,9 @@ class AuthService
         $dto->password = $this->hasher->hash($dto->password);
         $entity = $dto->toEntity(new User(), ['tags']);
         $created = $this->userRepo->save($entity);
-
         $this->tagRepo->saveTags($created, $dto->tags);
-        $created->getTags();
+        $response = (object) get_object_vars($created);
+        $response->tags = $this->tagRepo->findByUserId($created);
 
         //Simulating async sending email for now
         $this->bus->dispatch(new SendEmailMessage(
@@ -54,7 +54,7 @@ class AuthService
             'Thanks for registering!'
         ));
 
-        return $created;
+        return $response;
     }
 
     public function login($dto): string
@@ -62,9 +62,9 @@ class AuthService
         //1. Fetch user, throw error if not exists
         //2. Compare passwords, throw error if not matching
         //3. Generate and return jwt token tok controller
-        
+
         $user = $this->userRepo->findOneByEmail($dto->email);
-        if (!$user || !$this->hasher->verify($user->getPassword(), $dto->password)) 
+        if (!$user || !$this->hasher->verify($user->getPassword(), $dto->password))
             throw new HttpException(401, 'Invalid Credentials');
         return $this->jwt->generateToken(['id' => $user->id]);
     }
