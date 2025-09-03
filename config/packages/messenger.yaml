@@ -8,4 +8,4 @@ framework:
             async:
                 dsn: 'in-memory://'
         routing:
-            'App\Message\SendEmailMessage': async
+            'App\Message\UserRegistered': async
