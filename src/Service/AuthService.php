@@ -25,14 +25,14 @@ class AuthService
         $this->bus = $bus;
     }
 
-    public function register($dto)
+    public function register($dto): object
     {
         //1. Check if user already exists with same email. If exists, throw 409, if not proceed with logic
         //2. Need to hash password on DTO model
         //3. Convert dto to entity model
         //4. Create record in db
         //5. Set response object together with tags
-        //7. Send email using symfony messenger queue or something similar which is not going to block further logic
+        //7. Send email and notification using symfony messenger queue or something similar which is not going to block further logic
         //8. Send response to client
 
         $userExists = $this->userRepo->findOneByEmail($dto->email);
@@ -50,7 +50,7 @@ class AuthService
             'Thanks for registering!'
         ));
 
-        return $created;
+        return $response;
     }
 
     public function login($dto): string

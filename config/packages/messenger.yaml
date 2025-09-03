@@ -1,6 +1,5 @@
-# config/packages/messenger.yaml
-#This one is just simulating async process, it's not the real one, but for demonstrating pattern purposes
 #Real one need to use outer volumes in cache to hold data for processing, like redis or mqtt protocol
+#This one is just simulating async process, it's not the real one, but for demonstrating pattern purposes
 framework:
     messenger:
         default_bus: messenger.bus.default
@@ -9,3 +8,12 @@ framework:
                 dsn: 'in-memory://'
         routing:
             'App\Message\UserRegistered': async
+#This one is just simulating sync process, nice for testing and debugging
+# framework:
+#     messenger:
+#         default_bus: messenger.bus.default
+#         transports:
+#             sync:
+#                 dsn: 'sync://'
+#         routing:
+#             'App\Message\UserRegistered': sync
