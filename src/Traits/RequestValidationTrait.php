@@ -4,7 +4,7 @@ namespace App\Traits;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use App\Custom\ValidationException;
 
 trait RequestValidationTrait
 {
@@ -36,8 +36,8 @@ trait RequestValidationTrait
                 $messages[$error->getPropertyPath()][] = $error->getMessage();
             }
         
-            $exception = new BadRequestHttpException('Validation failed');
-            // dodaj property 'validations' direktno na objekt
+            $exception = new ValidationException('Validation failed');
+            // Assigning validations to exception for complete response
             $exception->validations = $messages;
         
             throw $exception;
