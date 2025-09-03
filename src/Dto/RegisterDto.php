@@ -47,7 +47,7 @@ class RegisterDto extends BaseAbstractDto
             maxMessage: 'Each tag cannot be longer than {{ limit }} characters.'
         )
     ])]
-    public array $tags;
+    public array $tags = [];
 
     public readonly int $created_at;
 

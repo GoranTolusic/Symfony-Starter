@@ -6,7 +6,6 @@ use App\Repository\UserRepository;
 use App\Entity\User;
 use App\Service\JwtService;
 use App\Message\SendEmailMessage;
-use App\Repository\TagRepository;
 use Symfony\Component\PasswordHasher\Hasher\NativePasswordHasher;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -16,16 +15,14 @@ class AuthService
     private JwtService $jwt;
     private NativePasswordHasher $hasher;
     private UserRepository $userRepo;
-    private TagRepository $tagRepo;
     private MessageBusInterface $bus;
 
-    public function __construct(JwtService $jwt, UserRepository $userRepo, MessageBusInterface $bus, TagRepository $tagRepo)
+    public function __construct(JwtService $jwt, UserRepository $userRepo, MessageBusInterface $bus)
     {
         $this->jwt = $jwt;
         $this->hasher = new NativePasswordHasher();
         $this->userRepo = $userRepo;
         $this->bus = $bus;
-        $this->tagRepo = $tagRepo;
     }
 
     public function register($dto)
@@ -34,8 +31,7 @@ class AuthService
         //2. Need to hash password on DTO model
         //3. Convert dto to entity model
         //4. Create record in db
-        //5. Save tags
-        //6. Set response
+        //5. Set response object together with tags
         //7. Send email using symfony messenger queue or something similar which is not going to block further logic
         //8. Send response to client
 
@@ -43,8 +39,7 @@ class AuthService
         if ($userExists) throw new HttpException(409, 'Email is already in use.');
         $dto->password = $this->hasher->hash($dto->password);
         $entity = $dto->toEntity(new User(), ['tags']);
-        $created = $this->userRepo->save($entity);
-        $this->tagRepo->saveTags($created, $dto->tags);
+        $created = $this->userRepo->save($entity, $dto->tags);
         $response = (object) get_object_vars($created);
         $response->tags = $dto->tags;
 
@@ -55,7 +50,7 @@ class AuthService
             'Thanks for registering!'
         ));
 
-        return $response;
+        return $created;
     }
 
     public function login($dto): string

@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Tag;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -22,12 +23,20 @@ class UserRepository extends ServiceEntityRepository
         return $this->findOneBy(['email' => $email]);
     }
 
-    public function save(User $user, bool $flush = true): User
+    public function save(User $user, ?array $tags = null, bool $flush = true): User
     {
-        $this->em->persist($user);
-        if ($flush) {
-            $this->em->flush();
+        //Handling relation tags for insert
+        if (is_array($tags) && !empty($tags)) {
+            foreach ($tags as $label) {
+                $tag = new Tag();
+                $tag->label = $label;
+                $tag->setUser($user);
+                $user->getTags()->add($tag);
+            }
         }
+
+        $this->em->persist($user);
+        if ($flush) $this->em->flush();
         return $user;
     }
 
