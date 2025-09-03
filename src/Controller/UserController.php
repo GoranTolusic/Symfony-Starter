@@ -31,7 +31,7 @@ class UserController extends AbstractController
     public function getOneUser(Request $request, int $id): JsonResponse
     {
         $this->authenticateUser($request);
-        return $this->json(['data' => $this->userService->getOneUser($id)]);
+        return $this->json(['data' => $this->userService->getOneUser($id, $request->query->get('showTags', false))]);
     }
 
     #[Route('/user/filter', name: 'user_filter', methods: ['POST'])]
