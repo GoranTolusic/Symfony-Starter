@@ -6,11 +6,11 @@ use App\Message\SendEmailMessage;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-class SendEmailMessageHandler
+class SendEmailNotification
 {
     public function __invoke(SendEmailMessage $message)
     {
-        // Sending email simulation
-        consoleLog("Simulated sending email to registered user.... {$message->to}: {$message->subject}");
+        // Fire some event on mqtt/socket/redis/elastic/service
+        consoleLog("Notify system that email has been sent to someone.... {$message->to}: {$message->subject}");
     }
 }
