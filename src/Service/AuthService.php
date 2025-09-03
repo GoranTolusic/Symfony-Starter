@@ -5,7 +5,7 @@ namespace App\Service;
 use App\Repository\UserRepository;
 use App\Entity\User;
 use App\Service\JwtService;
-use App\Message\SendEmailMessage;
+use App\Message\UserRegistered;
 use Symfony\Component\PasswordHasher\Hasher\NativePasswordHasher;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -44,7 +44,7 @@ class AuthService
         $response->tags = $dto->tags;
 
         //Simulating async sending email for now
-        $this->bus->dispatch(new SendEmailMessage(
+        $this->bus->dispatch(new UserRegistered(
             $dto->email,
             'Welcome!',
             'Thanks for registering!'
