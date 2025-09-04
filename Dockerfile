@@ -10,7 +10,8 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libzip-dev \
     zlib1g-dev \
-    && docker-php-ext-install pdo pdo_mysql intl mbstring zip opcache \
+    libcurl4-openssl-dev \
+    && docker-php-ext-install pdo pdo_mysql intl mbstring zip opcache curl \
     && apt-get clean
 
 # Composer installation
