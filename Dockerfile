@@ -1,9 +1,8 @@
-# Koristimo PHP 8.3 FPM image
 FROM php:8.3-fpm
 
 WORKDIR /var/www/html
 
-# Instaliraj system dependencies i PHP ekstenzije
+# System dependencies and PHP extensions required for application
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
@@ -14,21 +13,18 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install pdo pdo_mysql intl mbstring zip opcache \
     && apt-get clean
 
-# Instaliraj Composer
+# Composer installation
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Kopiraj projekt
 COPY . .
 
-# Instaliraj PHP dependencies
 RUN composer install --no-interaction --optimize-autoloader
 
-# Kopiraj entrypoint
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Postavi entrypoint
+# Set entrypoint
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
-# PHP-FPM koristi defaultni port 9000
+# PHP-FPM default port
 EXPOSE 9000

@@ -25,5 +25,5 @@ Requirements
 - Make sure you have installed and running docker on your system
 
 Steps
-1. Run "sudo bash run.sh". This will build and runn container on port 8080
+1. Run "sudo bash run.sh". This will build and run container on port 8080. This command out-of-the-box installs whole application and set mysql, nginx, and application containers.
 

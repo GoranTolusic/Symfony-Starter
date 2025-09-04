@@ -21,14 +21,14 @@ try {
 
     //If not, we are creating one
     if ($stmt->rowCount() === 0) {
-        echo "Baza '$DB_NAME' ne postoji. Kreiram...\n";
+        echo "Database '$DB_NAME' does not exists. Creating...\n";
         $pdo->exec("CREATE DATABASE `$DB_NAME` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
-        echo "Baza '$DB_NAME' je kreirana.\n";
+        echo "Database '$DB_NAME' created.\n";
     } else {
-        echo "Baza '$DB_NAME' već postoji.\n";
+        echo "Database '$DB_NAME' already exists.\n";
     }
 
 } catch (PDOException $e) {
-    echo "Greška: " . $e->getMessage() . "\n";
+    echo "DB Error: " . $e->getMessage() . "\n";
     exit(1);
 }
