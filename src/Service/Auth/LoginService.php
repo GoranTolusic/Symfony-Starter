@@ -7,7 +7,6 @@ use App\Service\JwtService;
 use Symfony\Component\PasswordHasher\Hasher\NativePasswordHasher;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-
 class LoginService
 {
     private JwtService $jwt;

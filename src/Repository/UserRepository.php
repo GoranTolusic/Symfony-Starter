@@ -45,7 +45,8 @@ class UserRepository extends ServiceEntityRepository
         $offset = ($page - 1) * $limit;
         $qb = $this->createQueryBuilder('u');
 
-        //Applying where clause if term exists in request payload
+        // Applying where clause if term exists in request payload 
+        // and setting terms as binding parameter to prevent potential sql injections
         if ($term) {
             $qb->andWhere('u.email LIKE :term OR u.first_name LIKE :term OR u.last_name LIKE :term')
                 ->setParameter('term', '%' . $term . '%');
