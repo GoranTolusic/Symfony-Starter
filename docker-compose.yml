@@ -1,6 +1,21 @@
 version: '3.9'
 
 services:
+  app-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    container_name: app-test
+    depends_on:
+      - web
+    environment:
+      APP_BASE_URL: http://web:80
+      APP_ENV: test
+    volumes:
+      - .:/var/www/html
+    tty: true
+    stdin_open: true
+
   db:
     image: mysql:8.3
     container_name: db

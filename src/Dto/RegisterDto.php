@@ -28,7 +28,7 @@ class RegisterDto extends BaseAbstractDto
     #[Assert\NotNull(message: 'Password cannot be null.')]
     #[Assert\Type('string')]
     #[Assert\NotBlank]
-    #[Assert\Length(min: 4, max: 8)]
+    #[Assert\Length(min: 4, max: 20)]
     #[Assert\Regex(
         pattern: "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/",
         message: "Password must contain at least one lowercase letter, one uppercase letter, and one number."

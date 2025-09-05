@@ -1,0 +1,27 @@
+FROM php:8.3-fpm
+
+WORKDIR /var/www/html
+
+# System dependencies and PHP extensions required for test execution
+RUN apt-get update && apt-get install -y \
+    bash \
+    git \
+    unzip \
+    libicu-dev \
+    libonig-dev \
+    libzip-dev \
+    zlib1g-dev \
+    libcurl4-openssl-dev \
+    && docker-php-ext-install pdo pdo_mysql intl mbstring zip opcache curl \
+    && apt-get clean
+
+# Composer installation
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Copy only what is needed for tests
+COPY . .
+
+# Install PHP dependencies
+RUN composer install --no-interaction --optimize-autoloader
+
+CMD ["bash", "-c", "composer start-test; tail -f /dev/null"]
