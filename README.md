@@ -26,4 +26,5 @@ Requirements
 
 Steps
 1. Run "sudo bash run.sh". This will build and run container on port 8080. This command out-of-the-box installs whole application and set mysql, nginx, and application containers.
+You can run command with additional as "sudo bash run.sh include-tests" to start tests. If any of the test failes containers are stoping and rollbacking. Variables for test env is located in .env.test
 

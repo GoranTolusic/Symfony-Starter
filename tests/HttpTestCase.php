@@ -26,7 +26,19 @@ class HttpTestCase extends TestCase
     protected function getJson(string $url, array $options = []): array
     {
         $response = $this->request('GET', $url, $options);
-        return json_decode($response->getContent(), true);
+
+        try {
+            $content = json_decode($response->getContent(), true);
+            $status = $response->getStatusCode();
+        } catch (\Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface $e) {
+            $status = $e->getResponse()->getStatusCode();
+            $content = json_decode($e->getResponse()->getContent(false), true);
+        }
+
+        return [
+            'status' => $status,
+            'body' => $content
+        ];
     }
 
     protected function postJson(string $url, array $data = []): array
@@ -34,6 +46,18 @@ class HttpTestCase extends TestCase
         $response = $this->request('POST', $url, [
             'json' => $data,
         ]);
-        return json_decode($response->getContent(), true);
+
+        try {
+            $content = json_decode($response->getContent(), true);
+            $status = $response->getStatusCode();
+        } catch (\Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface $e) {
+            $status = $e->getResponse()->getStatusCode();
+            $content = json_decode($e->getResponse()->getContent(false), true);
+        }
+
+        return [
+            'status' => $status,
+            'body' => $content
+        ];
     }
 }
