@@ -57,7 +57,9 @@
             "php -S 127.0.0.1:8000 -t public"
         ],
         "start-test": [
-            "vendor/bin/phpunit -c phpunit.dist.xml"
+            "vendor/bin/phpunit tests/Controller/Auth/RegisterControllerTest.php",
+            "vendor/bin/phpunit tests/Controller/Auth/LoginControllerTest.php",
+            "vendor/bin/phpunit --exclude-group auth"
         ],
         "cache-clear": [
             "php bin/console cache:clear"

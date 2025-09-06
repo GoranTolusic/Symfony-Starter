@@ -5,6 +5,9 @@ namespace App\Tests\Controller\Auth;
 use App\Tests\HttpTestCase;
 use App\Tests\EnvConfig;
 
+/**
+ * @group auth
+ */
 class RegisterControllerTest extends HttpTestCase
 {
     private EnvConfig $env;
