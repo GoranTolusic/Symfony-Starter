@@ -11,8 +11,6 @@ services:
     environment:
       APP_BASE_URL: http://web:80
       APP_ENV: test
-    volumes:
-      - .:/var/www/html
     tty: true
     stdin_open: true
 
@@ -49,8 +47,6 @@ services:
       DATABASE_URL: "mysql://root:1234@db:3306/symfony_starter?serverVersion=8.3.0"
       CONSOLE_LOGS: "true"
       JWT_SECRET: kQ345kZ35gjh3g4509Fsurn8Fv4AyUUa
-    volumes:
-      - .:/var/www/html
     expose:
       - "9000"
 

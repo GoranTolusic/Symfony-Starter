@@ -58,8 +58,7 @@
         ],
         "start-test": [
             "vendor/bin/phpunit tests/Controller/Auth/RegisterControllerTest.php",
-            "vendor/bin/phpunit tests/Controller/Auth/LoginControllerTest.php",
-            "vendor/bin/phpunit --exclude-group auth"
+            "vendor/bin/phpunit tests/Controller/Auth/LoginControllerTest.php"
         ],
         "cache-clear": [
             "php bin/console cache:clear"

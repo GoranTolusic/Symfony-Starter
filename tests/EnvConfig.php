@@ -40,5 +40,7 @@ class EnvConfig
     public function append(string $varName, string $value): void
     {
         file_put_contents($this->file, "$varName=$value\n", FILE_APPEND);
+        //Reload variables
+        $this->dotenv->loadEnv($this->file);
     }
 }
