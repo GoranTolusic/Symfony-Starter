@@ -50,4 +50,55 @@ class UpdateProfileControllerTest extends HttpTestCase
         $this->assertEquals($generatedFirstName, $response['body']['data']['first_name']);
         $this->assertEquals($generatedLastName, $response['body']['data']['last_name']);
     }
+
+    public function testUpdateProfileUnauthorized(): void
+    {
+        $headers = [
+            'Authorization' => 'randomWrongToken',
+            'Accept' => 'application/json'
+        ];
+
+        $generatedFirstName = $this->generateRandomString(10);
+        $generatedLastName = $this->generateRandomString(12);
+        $payload = [
+            "first_name" => $generatedFirstName,
+            "last_name" => $generatedLastName,
+        ];
+
+        $response = $this->putJson('/user/updateMyProfile', [
+            'json' => $payload,
+            'headers' => $headers
+        ]);
+
+        $this->assertContains(
+            $response['status'],
+            [401],
+            "Expected status 200 (success), got {$response['status']}"
+        );
+    }
+
+    public function testUpdateProfileBadRequest(): void
+    {
+        $headers = [
+            'Authorization' => $this->env->get('TEST_TOKEN'),
+            'Accept' => 'application/json'
+        ];
+
+        $generatedLastName = $this->generateRandomString(12);
+        $payload = [
+            "first_name" => null,
+            "last_name" => $generatedLastName,
+        ];
+
+        $response = $this->putJson('/user/updateMyProfile', [
+            'json' => $payload,
+            'headers' => $headers
+        ]);
+
+        $this->assertContains(
+            $response['status'],
+            [400],
+            "Expected status 200 (success), got {$response['status']}"
+        );
+    }
 }
