@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Controller\Auth;
+namespace App\Tests\Controller\User;
 
 use App\Tests\HttpTestCase;
 use App\Tests\EnvConfig;

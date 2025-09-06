@@ -44,4 +44,9 @@ class HttpTestCase extends TestCase
     {
         return $this->request('POST', $url, $options);
     }
+
+    protected function putJson(string $url, array $options = []): array
+    {
+        return $this->request('', $url, $options);
+    }
 }
