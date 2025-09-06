@@ -4,12 +4,14 @@ namespace App\Tests\Controller\User;
 
 use App\Tests\HttpTestCase;
 use App\Tests\EnvConfig;
+use App\Traits\HelpersTrait;
 
 /**
  * @group user
  */
 class UpdateProfileControllerTest extends HttpTestCase
 {
+    use HelpersTrait;
     private EnvConfig $env;
 
     //HttpTestCase has final __constructor so we cant override it, but we can use setUp which is called before every test by defaul
@@ -27,9 +29,11 @@ class UpdateProfileControllerTest extends HttpTestCase
             'Accept' => 'application/json'
         ];
 
+        $generatedFirstName = $this->generateRandomString(10);
+        $generatedLastName = $this->generateRandomString(12);
         $payload = [
-            "first_name" => 'ChangedName',
-            "last_name" => 'ChangedSurname',
+            "first_name" => $generatedFirstName,
+            "last_name" => $generatedLastName,
         ];
 
         $response = $this->putJson('/user/updateMyProfile', [
@@ -42,5 +46,8 @@ class UpdateProfileControllerTest extends HttpTestCase
             [200],
             "Expected status 200 (success), got {$response['status']}"
         );
+
+        $this->assertEquals($generatedFirstName, $response['body']['data']['first_name']);
+        $this->assertEquals($generatedLastName, $response['body']['data']['last_name']);
     }
 }
