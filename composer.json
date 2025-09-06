@@ -60,7 +60,8 @@
             "vendor/bin/phpunit tests/Controller/Auth/RegisterControllerTest.php",
             "vendor/bin/phpunit tests/Controller/Auth/LoginControllerTest.php",
             "vendor/bin/phpunit tests/Controller/User/GetUserControllerTest.php",
-            "vendor/bin/phpunit tests/Controller/User/UpdateProfileControllerTest.php"
+            "vendor/bin/phpunit tests/Controller/User/UpdateProfileControllerTest.php",
+            "vendor/bin/phpunit tests/Controller/User/FilterUserControllerTest.php"
         ],
         "cache-clear": [
             "php bin/console cache:clear"
