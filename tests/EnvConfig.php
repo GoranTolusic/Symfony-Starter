@@ -8,6 +8,7 @@ use Symfony\Component\Dotenv\Dotenv;
 class EnvConfig
 {
     private static ?EnvConfig $instance = null;
+    private string $file;
     public Dotenv $dotenv;
     private function __construct()
     {
@@ -18,7 +19,8 @@ class EnvConfig
     private function loadTestEnv()
     {
         $projectRoot = dirname(__DIR__);
-        $this->dotenv->loadEnv($projectRoot . '/.env.test');
+        $this->file = $projectRoot . '/.env.test';
+        $this->dotenv->loadEnv($this->file);
     }
 
     public static function getInstance(): self
@@ -33,5 +35,10 @@ class EnvConfig
     public function get(string $key, ?string $default = null): ?string
     {
         return $_ENV[$key] ?? $default;
+    }
+
+    public function append(string $varName, string $value): void
+    {
+        file_put_contents($this->file, "$varName=$value\n", FILE_APPEND);
     }
 }
