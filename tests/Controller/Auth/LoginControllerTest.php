@@ -27,15 +27,16 @@ class LoginControllerTest extends HttpTestCase
             "password" => $this->env->get('TEST_PASSWORD'),
         ];
 
-        $response = $this->postJson('/auth/login', $payload);
+        $response = $this->postJson('/auth/login', ['json' => $payload]);
         $this->assertContains(
             $response['status'],
             [200],
             "Expected status 200 (success), got {$response['status']}"
         );
 
-        //Append token in .env.test
-        $this->env->append('AUTH_TOKEN', $response['body']['data']);
+        //Append token and id in .env.test
+        $this->env->append('TEST_TOKEN', $response['body']['data']['token']);
+        $this->env->append('TEST_ID', $response['body']['data']['id']);
     }
 
     public function testLoginWithInvalidPayload(): void
@@ -45,9 +46,7 @@ class LoginControllerTest extends HttpTestCase
             'password' => ''
         ];
 
-        $response = $this->postJson('/auth/login', $payload);
-        echo 'token spremljen u env';
-        var_dump($this->env->get('AUTH_TOKEN'));
+        $response = $this->postJson('/auth/login', ['json' => $payload]);
         $this->assertContains(
             $response['status'],
             [400],
@@ -62,7 +61,7 @@ class LoginControllerTest extends HttpTestCase
             'password' => 'invalid123Password'
         ];
 
-        $response = $this->postJson('/auth/login', $payload);
+        $response = $this->postJson('/auth/login', ['json' => $payload]);
         $this->assertContains(
             $response['status'],
             [401],

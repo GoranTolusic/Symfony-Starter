@@ -20,15 +20,18 @@ class LoginService
         $this->userRepo = $userRepo;
     }
 
-    public function __invoke($dto): string
+    public function __invoke($dto): array
     {
         //1. Fetch user, throw error if not exists
         //2. Compare passwords, throw error if not matching
-        //3. Generate and return jwt token tok controller
+        //3. Generate and return id and jwt token to controller
 
         $user = $this->userRepo->findOneByEmail($dto->email);
         if (!$user || !$this->hasher->verify($user->getPassword(), $dto->password))
             throw new HttpException(401, 'Invalid Credentials');
-        return $this->jwt->generateToken(['id' => $user->id]);
+        return [
+            'id' => $user->id,
+            'token' => $this->jwt->generateToken(['id' => $user->id])
+        ];
     }
 }

@@ -30,7 +30,7 @@ class RegisterControllerTest extends HttpTestCase
             "tags" => ["Jedan", "Dva", "Tri", "Četiri", "Pet", "Šest", "Sedam", "Osam", "Devet", "Deset"],
         ];
 
-        $response = $this->postJson('/auth/register', $payload);
+        $response = $this->postJson('/auth/register', ['json' => $payload]);
         $this->assertContains(
             $response['status'],
             [200, 409],
@@ -45,7 +45,7 @@ class RegisterControllerTest extends HttpTestCase
             'password' => ''
         ];
 
-        $response = $this->postJson('/auth/register', $payload);
+        $response = $this->postJson('/auth/register', ['json' => $payload]);
         $this->assertEquals(400, $response['status']);
     }
 }

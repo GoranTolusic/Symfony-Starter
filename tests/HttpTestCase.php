@@ -40,10 +40,8 @@ class HttpTestCase extends TestCase
         return $this->request('GET', $url, $options);
     }
 
-    protected function postJson(string $url, array $data = []): array
+    protected function postJson(string $url, array $options = []): array
     {
-        return $this->request('POST', $url, [
-            'json' => $data,
-        ]);
+        return $this->request('POST', $url, $options);
     }
 }
