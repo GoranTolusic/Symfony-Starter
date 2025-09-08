@@ -23,8 +23,9 @@ if [ -f create_db.php ]; then
 fi
 composer migrate || true
 
-#Clear cache
+#Clear and ready cache
 composer cache-clear
+composer cache-ready
 
 #Opcache info
 php -i | grep opcache.enable

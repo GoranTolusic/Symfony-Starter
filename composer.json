@@ -64,7 +64,10 @@
             "vendor/bin/phpunit tests/Controller/User/FilterUserControllerTest.php"
         ],
         "cache-clear": [
-            "php bin/console cache:clear"
+            "php bin/console cache:clear --no-warmup"
+        ],
+        "cache-ready": [
+            "php bin/console cache:warmup"
         ],
         "create-db": [
             "php create_db.php"
