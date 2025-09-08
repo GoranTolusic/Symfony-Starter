@@ -1,0 +1,6 @@
+.git
+.gitignore
+.phpunit.cache
+Dockerfile
+Dockerfile.test
+docker-compose.yml

@@ -14,6 +14,9 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install pdo pdo_mysql intl mbstring zip opcache curl \
     && apt-get clean
 
+# Copy opcache .ini to enable caching for better performance
+COPY php/conf.d/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+
 # Composer installation
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 

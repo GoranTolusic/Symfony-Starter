@@ -5,14 +5,13 @@ WORKDIR /var/www/html
 # System dependencies and PHP extensions required for test execution
 RUN apt-get update && apt-get install -y \
     bash \
-    git \
     unzip \
     libicu-dev \
     libonig-dev \
     libzip-dev \
     zlib1g-dev \
     libcurl4-openssl-dev \
-    && docker-php-ext-install pdo pdo_mysql intl mbstring zip opcache curl \
+    && docker-php-ext-install pdo pdo_mysql intl mbstring zip curl \
     && apt-get clean
 
 # Composer installation
