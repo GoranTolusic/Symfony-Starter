@@ -1,0 +1,205 @@
+{
+	"info": {
+		"_postman_id": "a37f2658-751f-4f25-88f3-0fe0b5db22d3",
+		"name": "Symfony starter",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "48041754",
+		"_collection_link": "https://goran-tolusic-1210218.postman.co/workspace/Goran-Tolusic's-Workspace~bd9a8e08-58d2-41eb-8fd6-fa1b42ba9699/collection/48041754-a37f2658-751f-4f25-88f3-0fe0b5db22d3?action=share&source=collection_link&creator=48041754"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\" : \"toca@example.com\",\n    \"first_name\": \"Test\",\n    \"last_name\": \"Testović\",\n    \"password\": \"1234Pet\",\n    \"tags\": [\"Jedan\", \"Dva\", \"Tri\", \"Četiri\", \"Pet\", \"Šest\", \"Sedam\", \"Osam\", \"Devet\", \"Deset\"],\n    \"nepostojeci_prop\": \"Ovo se nece hidrirati u DTO objekt uopce jer nije definiran prop unutar DTO klase\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\" : \"toca@example.com\",\n    \"password\": \"1234Pet\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Get one",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/user/43?showTags=true",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"43"
+							],
+							"query": [
+								{
+									"key": "showTags",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filter",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"term\": \"test\",\n    \"limit\": 20,\n    \"page\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user/filter",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"filter"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"first_name\": \"Ime izmjenjeno\",\n    \"last_name\": \"Prezime Izmjenjeno\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user/updateMyProfile",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"updateMyProfile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://127.0.0.1:8080",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiZXhwIjoxNzU2NzMyNTEwfQ.GMgt1g94D8VRPT3s5NtpSMhaPCrRzgkiu1C_e4S9g1M",
+			"type": "string"
+		}
+	]
+}
