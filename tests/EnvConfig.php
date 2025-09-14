@@ -39,8 +39,19 @@ class EnvConfig
 
     public function append(string $varName, string $value): void
     {
-        file_put_contents($this->file, "$varName=$value\n", FILE_APPEND);
-        //Reload variables
+        $content = file($this->file, FILE_IGNORE_NEW_LINES);
+        $found = false;
+        foreach ($content as &$line) {
+            if (str_starts_with($line, "$varName=")) {
+                $line = "$varName=$value";
+                $found = true;
+                break;
+            }
+        }
+        if (!$found) {
+            $content[] = "$varName=$value";
+        }
+        file_put_contents($this->file, implode("\n", $content) . "\n");
         $this->dotenv->loadEnv($this->file);
     }
 }
