@@ -17,10 +17,8 @@ done
 
 echo "MySQL is ready!"
 
-#Instalation process: creating database and migrating tables
-if [ -f create_db.php ]; then
-    composer create-db
-fi
+#Instalation process: creating database if not exists and migrating tables
+composer create-db
 composer migrate || true
 
 #Clear and ready cache
