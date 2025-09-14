@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="bootstrap.php"
+         colors="true"
+         cacheDirectory="../.phpunit.cache">
+
+    <testsuites>
+        <testsuite name="Ordered Tests">
+            <file>Controller/Auth/RegisterControllerTest.php</file>
+            <file>Controller/Auth/LoginControllerTest.php</file>
+            <file>Controller/User/GetUserControllerTest.php</file>
+            <file>Controller/User/UpdateProfileControllerTest.php</file>
+            <file>Controller/User/FilterUserControllerTest.php</file>
+        </testsuite>
+    </testsuites>
+</phpunit>

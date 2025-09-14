@@ -57,11 +57,7 @@
             "php -S 127.0.0.1:8000 -t public"
         ],
         "start-test": [
-            "vendor/bin/phpunit tests/Controller/Auth/RegisterControllerTest.php",
-            "vendor/bin/phpunit tests/Controller/Auth/LoginControllerTest.php",
-            "vendor/bin/phpunit tests/Controller/User/GetUserControllerTest.php",
-            "vendor/bin/phpunit tests/Controller/User/UpdateProfileControllerTest.php",
-            "vendor/bin/phpunit tests/Controller/User/FilterUserControllerTest.php"
+            "vendor/bin/phpunit -c tests/phpunit.ordered.xml"
         ],
         "cache-clear": [
             "php bin/console cache:clear --no-warmup"
