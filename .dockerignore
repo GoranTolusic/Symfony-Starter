@@ -4,3 +4,5 @@
 Dockerfile
 Dockerfile.test
 docker-compose.yml
+vendor
+var
